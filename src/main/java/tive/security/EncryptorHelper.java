@@ -1,6 +1,6 @@
 package tive.security;
 
-import com.sun.org.apache.xml.internal.security.utils.Base64;
+import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -40,7 +40,7 @@ public class EncryptorHelper {
     }
 
     public static String encrypt64(String password) throws Exception {
-        return Base64.encode(encrypt(toBytesFromCharset(password)));
+        return new String(Base64.encodeBase64(encrypt(toBytesFromCharset(password))));
     }
 
     public static byte[] encrypt(byte[] password) throws Exception {
@@ -50,7 +50,7 @@ public class EncryptorHelper {
     }
 
     public static String decrypt64(String encryptedPassword) throws Exception {
-        return toStringFromCharset(decrypt(Base64.decode(encryptedPassword)));
+        return toStringFromCharset(decrypt(Base64.decodeBase64(encryptedPassword.getBytes())));
     }
 
     public static byte[] decrypt(byte[] encrypted) throws Exception {
@@ -58,5 +58,4 @@ public class EncryptorHelper {
         cipher.init(Cipher.DECRYPT_MODE, getSecret());
         return cipher.doFinal(encrypted);
     }
-
 }
